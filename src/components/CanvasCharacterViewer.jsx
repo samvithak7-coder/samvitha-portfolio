@@ -20,7 +20,7 @@ export default function CanvasCharacterViewer() {
   const animationFrameRef = useRef(null);
   const scrollRef = useRef(0);
 
-  // Preload all 160 frames + center.webp
+  // Preload all 160 frames + center.webp using Vite's dynamic base URL
   useEffect(() => {
     let mounted = true;
     let count = 0;
@@ -36,9 +36,14 @@ export default function CanvasCharacterViewer() {
       }
     };
 
+    // Ensure baseUrl resolves dynamically across local dev & Vercel builds
+    const baseUrl = import.meta.env.BASE_URL.endsWith('/')
+      ? import.meta.env.BASE_URL
+      : `${import.meta.env.BASE_URL}/`;
+
     // Load center.webp
     const centerImg = new Image();
-    centerImg.src = '/frames/center.webp';
+    centerImg.src = `${baseUrl}frames/center.webp`;
     centerImg.onload = updateProgress;
     centerImg.onerror = updateProgress;
     centerImageRef.current = centerImg;
@@ -47,7 +52,7 @@ export default function CanvasCharacterViewer() {
     for (let i = 0; i < TOTAL_FRAMES; i++) {
       const img = new Image();
       const numStr = String(i).padStart(3, '0');
-      img.src = `/frames/frame_${numStr}.webp`;
+      img.src = `${baseUrl}frames/frame_${numStr}.webp`;
       img.onload = updateProgress;
       img.onerror = updateProgress;
       images[i] = img;
@@ -108,7 +113,7 @@ export default function CanvasCharacterViewer() {
       const width = canvas.width;
       const height = canvas.height;
 
-      // 1. Clear canvas completely & fill background with exact #D31820 red for crisp single-frame rendering
+      // 1. Clear canvas completely & fill background with exact #D31820 red
       ctx.clearRect(0, 0, width, height);
       ctx.globalAlpha = 1.0;
       ctx.globalCompositeOperation = 'source-over';
