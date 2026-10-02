@@ -18,6 +18,7 @@ export default function CanvasCharacterViewer() {
   const mouseRef = useRef({ x: window.innerWidth / 2, y: window.innerHeight / 2 });
   const currentAngleRef = useRef(0);
   const animationFrameRef = useRef(null);
+  const scrollRef = useRef(0);
 
   // Preload all 160 frames + center.webp
   useEffect(() => {
@@ -57,8 +58,6 @@ export default function CanvasCharacterViewer() {
       mounted = false;
     };
   }, []);
-
-  const scrollRef = useRef(0);
 
   // Track scroll position
   useEffect(() => {
@@ -128,7 +127,7 @@ export default function CanvasCharacterViewer() {
       const deadzoneRadius = minDimension * DEADZONE_RADIUS_RATIO; // ~12% radius deadzone
 
       const isDeadzone = dist < deadzoneRadius;
-      const isScrolledDown = scrollRef.current > 150; // Static when scrolled down
+      const isScrolledDown = scrollRef.current > 150; // Static center face when scrolled down
 
       // Calculate target mouse angle relative to face center with ANGLE_OFFSET
       const targetAngle = Math.atan2(dy, dx) + ANGLE_OFFSET;
@@ -186,7 +185,7 @@ export default function CanvasCharacterViewer() {
   const progressPercent = Math.min(100, Math.round((loadedCount / (TOTAL_FRAMES + 1)) * 100));
 
   return (
-    <div className="fixed inset-0 w-full h-full z-0 overflow-hidden pointer-events-none">
+    <div className="fixed inset-0 w-full h-screen -z-10 overflow-hidden pointer-events-none">
       {/* Loading Overlay */}
       {!isLoaded && (
         <div className="absolute inset-0 bg-[#D31820] flex flex-col items-center justify-center z-50 pointer-events-auto">
