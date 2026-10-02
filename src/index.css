@@ -1,0 +1,68 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    background-color: #D31820;
+    color: #ffffff;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #0D0506;
+}
+::-webkit-scrollbar-thumb {
+  background: #D31820;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #FF4D55;
+}
+
+/* Glassmorphism Cards */
+.glass-card {
+  background: rgba(13, 5, 6, 0.78);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+.glass-card-hover {
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.glass-card-hover:hover {
+  transform: translateY(-6px);
+  border-color: rgba(255, 77, 85, 0.5);
+  box-shadow: 0 25px 50px rgba(211, 24, 32, 0.35);
+}
+
+/* Glass Navbar */
+.glass-nav {
+  background: rgba(13, 5, 6, 0.65);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+/* Glowing text highlight */
+.glow-text {
+  text-shadow: 0 0 25px rgba(255, 255, 255, 0.7);
+}
+
+.glow-red {
+  box-shadow: 0 0 30px rgba(211, 24, 32, 0.6);
+}
+
+/* Hide native cursor for custom cursor experience on desktop */
+@media (pointer: fine) {
+  body, a, button, input, textarea, select, [role="button"] {
+    cursor: none !important;
+  }
+}
