@@ -4,6 +4,10 @@ const TOTAL_FRAMES = 160;
 const RESPONSIVENESS = 0.45;
 const ANGLE_OFFSET = Math.PI / 2;
 
+// Custom alignment offsets (in pixels)
+const OFFSET_X = 0;   // Positive shifts RIGHT, negative shifts LEFT
+const OFFSET_Y = 0;   // Positive shifts DOWN, negative shifts UP
+
 export default function CanvasCharacterViewer() {
   const canvasRef = useRef(null);
   const framesRef = useRef([]);
@@ -13,12 +17,12 @@ export default function CanvasCharacterViewer() {
   const animationFrameRef = useRef(null);
 
   useEffect(() => {
-    // 1. Preload center frame
+    // 1. Preload center frame fallback
     const centerImg = new Image();
     centerImg.src = '/frames/center.webp';
     centerImageRef.current = centerImg;
 
-    // 2. Preload 160 frame webp images
+    // 2. Preload 160 frame webp images into reference array
     const images = [];
     for (let i = 0; i < TOTAL_FRAMES; i++) {
       const img = new Image();
@@ -28,18 +32,26 @@ export default function CanvasCharacterViewer() {
     }
     framesRef.current = images;
 
+    // 3. Track cursor position
     const handleMouseMove = (e) => {
       mouseRef.current = { x: e.clientX, y: e.clientY };
     };
 
-    window.addEventListener('mousemove', handleMouseMove);
+    const handleTouchMove = (e) => {
+      if (e.touches && e.touches[0]) {
+        mouseRef.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+      }
+    };
 
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('touchmove', handleTouchMove);
+
+    // 4. Setup canvas rendering
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
 
     const handleResize = () => {
-      // Scale canvas resolution to matching screen size with devicePixelRatio for high-DPI
       const dpr = window.devicePixelRatio || 1;
       canvas.width = window.innerWidth * dpr;
       canvas.height = window.innerHeight * dpr;
@@ -55,13 +67,14 @@ export default function CanvasCharacterViewer() {
 
       ctx.clearRect(0, 0, width, height);
 
-      // Draw background base color
+      // Background base fill
       ctx.fillStyle = '#D31820';
       ctx.fillRect(0, 0, width, height);
 
       const dx = mouseRef.current.x - width / 2;
       const dy = mouseRef.current.y - height / 2;
 
+      // Angle calculation for cursor tracking
       const targetAngle = Math.atan2(dy, dx) + ANGLE_OFFSET;
       let diff = targetAngle - currentAngleRef.current;
       while (diff < -Math.PI) diff += Math.PI * 2;
@@ -77,12 +90,14 @@ export default function CanvasCharacterViewer() {
       }
 
       if (imgToDraw && imgToDraw.complete && imgToDraw.naturalWidth > 0) {
-        // Full cover scale calculation
+        // Calculate cover dimension scaling
         const scale = Math.max(width / imgToDraw.naturalWidth, height / imgToDraw.naturalHeight);
         const drawWidth = imgToDraw.naturalWidth * scale;
         const drawHeight = imgToDraw.naturalHeight * scale;
-        const drawX = (width - drawWidth) / 2;
-        const drawY = (height - drawHeight) / 2;
+
+        // Apply centering and optional offsets
+        const drawX = (width - drawWidth) / 2 + OFFSET_X;
+        const drawY = (height - drawHeight) / 2 + OFFSET_Y;
 
         ctx.drawImage(imgToDraw, drawX, drawY, drawWidth, drawHeight);
       }
@@ -92,8 +107,10 @@ export default function CanvasCharacterViewer() {
 
     render();
 
+    // 5. Cleanup event listeners on unmount
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('touchmove', handleTouchMove);
       window.removeEventListener('resize', handleResize);
       if (animationFrameRef.current) cancelAnimationFrame(animationFrameRef.current);
     };
