@@ -10,18 +10,18 @@ import Contact from './components/Contact';
 
 export default function App() {
   return (
-    <div className="relative min-h-screen bg-[#D31820] text-white selection:bg-white selection:text-[#D31820]">
+    <div className="relative min-h-screen text-white selection:bg-white selection:text-[#D31820]">
       {/* Custom Glowing Cursor */}
       <CustomCursor />
 
-      {/* Interactive 3D Canvas Background */}
+      {/* Interactive 3D Canvas Background (Renders solid red + character behind everything) */}
       <CanvasCharacterViewer />
 
       {/* Floating Glass Navigation */}
       <Navbar />
 
-      {/* Main Content Sections */}
-      <main className="relative z-10">
+      {/* Main Content Sections Layered Above Canvas */}
+      <main className="relative z-10 pointer-events-auto">
         <Hero />
         <Projects />
         <ExperienceEducation />
