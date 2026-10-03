@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 
 const TOTAL_FRAMES = 160;
 const RESPONSIVENESS = 0.45;
@@ -8,9 +8,6 @@ const DEADZONE_RADIUS_RATIO = 0.12;
 
 export default function CanvasCharacterViewer() {
   const canvasRef = useRef(null);
-  const [loadedCount, setLoadedCount] = useState(0);
-  const [isLoaded, setIsLoaded] = useState(false);
-
   const framesRef = useRef([]);
   const centerImageRef = useRef(null);
 
@@ -20,80 +17,35 @@ export default function CanvasCharacterViewer() {
   const scrollRef = useRef(0);
 
   useEffect(() => {
-    let mounted = true;
-    let count = 0;
-    const images = [];
-
-    const updateProgress = () => {
-      count++;
-      if (mounted) {
-        setLoadedCount(count);
-        // Force loaded state once at least 10% of frames load or all finish
-        if (count >= 15) {
-          setIsLoaded(true);
-        }
-      }
-    };
-
-    // Construct origin-relative paths
-    const origin = typeof window !== 'undefined' ? window.location.origin : '';
-
+    // 1. Preload center fallback
     const centerImg = new Image();
-    centerImg.src = `${origin}/frames/center.webp`;
-    centerImg.onload = updateProgress;
-    centerImg.onerror = updateProgress;
+    centerImg.src = '/frames/center.webp';
     centerImageRef.current = centerImg;
 
+    // 2. Preload 160 frames into ref array without blocking render
+    const images = [];
     for (let i = 0; i < TOTAL_FRAMES; i++) {
       const img = new Image();
       const numStr = String(i).padStart(3, '0');
-      img.src = `${origin}/frames/frame_${numStr}.webp`;
-      img.onload = updateProgress;
-      img.onerror = updateProgress;
+      img.src = `/frames/frame_${numStr}.webp`;
       images[i] = img;
     }
     framesRef.current = images;
 
-    // Safety fallback: force display after 2.5 seconds regardless of network status
-    const timeout = setTimeout(() => {
-      if (mounted) setIsLoaded(true);
-    }, 2500);
-
-    return () => {
-      mounted = false;
-      clearTimeout(timeout);
-    };
-  }, []);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      scrollRef.current = window.scrollY;
-    };
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  useEffect(() => {
-    const handleMouseMove = (e) => {
-      mouseRef.current = { x: e.clientX, y: e.clientY };
-    };
-
+    // 3. Track mouse & scroll
+    const handleScroll = () => { scrollRef.current = window.scrollY; };
+    const handleMouseMove = (e) => { mouseRef.current = { x: e.clientX, y: e.clientY }; };
     const handleTouchMove = (e) => {
       if (e.touches && e.touches[0]) {
         mouseRef.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
       }
     };
 
+    window.addEventListener('scroll', handleScroll, { passive: true });
     window.addEventListener('mousemove', handleMouseMove);
     window.addEventListener('touchmove', handleTouchMove);
 
-    return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('touchmove', handleTouchMove);
-    };
-  }, []);
-
-  useEffect(() => {
+    // 4. Canvas setup & animation loop
     const canvas = canvasRef.current;
     if (!canvas) return;
 
@@ -112,8 +64,6 @@ export default function CanvasCharacterViewer() {
       const height = canvas.height;
 
       ctx.clearRect(0, 0, width, height);
-      ctx.globalAlpha = 1.0;
-      ctx.globalCompositeOperation = 'source-over';
       ctx.fillStyle = '#D31820';
       ctx.fillRect(0, 0, width, height);
 
@@ -146,14 +96,10 @@ export default function CanvasCharacterViewer() {
 
       const frameIndex = Math.floor((normalizedAngle / (2 * Math.PI)) * TOTAL_FRAMES) % TOTAL_FRAMES;
 
-      let imgToDraw = null;
-      if (isDeadzone || isScrolledDown) {
-        imgToDraw = centerImageRef.current;
-      } else {
-        imgToDraw = framesRef.current[frameIndex] || centerImageRef.current;
-      }
+      let imgToDraw = (isDeadzone || isScrolledDown)
+        ? centerImageRef.current
+        : (framesRef.current[frameIndex] || centerImageRef.current);
 
-      // Fallback to center image if frame index isn't ready
       if (!imgToDraw || !imgToDraw.complete || imgToDraw.naturalWidth === 0) {
         imgToDraw = centerImageRef.current;
       }
@@ -174,40 +120,19 @@ export default function CanvasCharacterViewer() {
     animationFrameRef.current = requestAnimationFrame(render);
 
     return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('touchmove', handleTouchMove);
       window.removeEventListener('resize', handleResize);
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current);
       }
     };
-  }, [isLoaded]);
-
-  const progressPercent = Math.min(100, Math.round((loadedCount / (TOTAL_FRAMES + 1)) * 100));
+  }, []);
 
   return (
     <div className="fixed inset-0 w-full h-screen -z-10 overflow-hidden pointer-events-none">
-      {!isLoaded && (
-        <div className="absolute inset-0 bg-[#D31820] flex flex-col items-center justify-center z-50 pointer-events-auto">
-          <div className="relative w-24 h-24 mb-6 flex items-center justify-center">
-            <div className="absolute inset-0 rounded-full border-4 border-white/20 border-t-white animate-spin"></div>
-            <span className="font-bold text-white text-lg font-mono">{progressPercent}%</span>
-          </div>
-          <p className="text-white/90 text-sm font-semibold tracking-widest uppercase mb-3">
-            Loading Interactive 3D Experience...
-          </p>
-          <div className="w-64 h-1.5 bg-black/20 rounded-full overflow-hidden">
-            <div
-              className="h-full bg-white transition-all duration-150 rounded-full"
-              style={{ width: `${progressPercent}%` }}
-            />
-          </div>
-        </div>
-      )}
-
-      <canvas
-        ref={canvasRef}
-        className="w-full h-full block"
-      />
-
+      <canvas ref={canvasRef} className="w-full h-full block" />
       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/30 pointer-events-none" />
     </div>
   );
