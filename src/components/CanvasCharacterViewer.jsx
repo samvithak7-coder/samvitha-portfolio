@@ -17,22 +17,24 @@ export default function CanvasCharacterViewer() {
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
 
-    // 1. Preload fallback center image
+    const baseUrl = import.meta.env.BASE_URL || '/';
+
+    // 1. Preload center image
     const centerImg = new Image();
-    centerImg.src = '/frames/center.webp';
+    centerImg.src = `${baseUrl}frames/center.webp`;
     centerImageRef.current = centerImg;
 
-    // 2. Preload 160 WebP frames
+    // 2. Preload 160 WebP frames with Safari explicit load event handling
     const images = [];
     for (let i = 0; i < TOTAL_FRAMES; i++) {
       const img = new Image();
       const numStr = String(i).padStart(3, '0');
-      img.src = `/frames/frame_${numStr}.webp`;
+      img.src = `${baseUrl}frames/frame_${numStr}.webp`;
       images[i] = img;
     }
     framesRef.current = images;
 
-    // 3. Track mouse position
+    // 3. Mouse & Touch handlers
     const handleMouseMove = (e) => {
       mouseRef.current = { x: e.clientX, y: e.clientY };
     };
@@ -46,7 +48,7 @@ export default function CanvasCharacterViewer() {
     window.addEventListener('mousemove', handleMouseMove);
     window.addEventListener('touchmove', handleTouchMove, { passive: true });
 
-    // 4. Set accurate DPI and Canvas Dimensions
+    // 4. Resize Calibration for Safari
     const handleResize = () => {
       const dpr = window.devicePixelRatio || 1;
       const w = window.innerWidth;
@@ -64,19 +66,17 @@ export default function CanvasCharacterViewer() {
     handleResize();
     window.addEventListener('resize', handleResize);
 
-    // 5. Active Loop Rendering
+    // 5. Main Render Loop
     const render = () => {
       const width = window.innerWidth;
       const height = window.innerHeight;
 
-      // Fill canvas base red
       ctx.fillStyle = '#D31820';
       ctx.fillRect(0, 0, width, height);
 
       const dx = mouseRef.current.x - width / 2;
       const dy = mouseRef.current.y - height / 2;
 
-      // Rotation math
       const targetAngle = Math.atan2(dy, dx) + ANGLE_OFFSET;
       let diff = targetAngle - currentAngleRef.current;
       while (diff < -Math.PI) diff += Math.PI * 2;
@@ -88,17 +88,18 @@ export default function CanvasCharacterViewer() {
 
       let imgToDraw = framesRef.current[frameIndex];
 
-      if (!imgToDraw || !imgToDraw.complete || imgToDraw.naturalWidth === 0) {
+      // Robust check for Safari image readiness
+      const isLoaded = (img) => img && (img.complete || img.naturalWidth > 0);
+
+      if (!isLoaded(imgToDraw)) {
         imgToDraw = centerImageRef.current;
       }
 
-      if (imgToDraw && imgToDraw.complete && imgToDraw.naturalWidth > 0) {
-        // Calculate cover proportions
+      if (isLoaded(imgToDraw) && imgToDraw.naturalWidth > 0) {
         const scale = Math.max(width / imgToDraw.naturalWidth, height / imgToDraw.naturalHeight);
         const drawWidth = imgToDraw.naturalWidth * scale;
         const drawHeight = imgToDraw.naturalHeight * scale;
 
-        // Position character slightly shifted right to account for hero text layout
         const drawX = (width - drawWidth) / 2 + (width > 768 ? 120 : 0);
         const drawY = (height - drawHeight) / 2;
 
@@ -128,7 +129,8 @@ export default function CanvasCharacterViewer() {
         height: '100vh',
         zIndex: 0,
         pointerEvents: 'none',
-        overflow: 'hidden'
+        overflow: 'hidden',
+        WebkitTransform: 'translateZ(0)'
       }}
     >
       <canvas ref={canvasRef} style={{ display: 'block', width: '100%', height: '100%' }} />
