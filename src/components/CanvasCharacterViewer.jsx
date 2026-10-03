@@ -4,10 +4,6 @@ const TOTAL_FRAMES = 160;
 const RESPONSIVENESS = 0.45;
 const ANGLE_OFFSET = Math.PI / 2;
 
-// Custom alignment offsets (in pixels)
-const OFFSET_X = 0;   // Positive shifts RIGHT, negative shifts LEFT
-const OFFSET_Y = 0;   // Positive shifts DOWN, negative shifts UP
-
 export default function CanvasCharacterViewer() {
   const canvasRef = useRef(null);
   const framesRef = useRef([]);
@@ -17,12 +13,12 @@ export default function CanvasCharacterViewer() {
   const animationFrameRef = useRef(null);
 
   useEffect(() => {
-    // 1. Preload center frame fallback
+    // 1. Preload fallback center image
     const centerImg = new Image();
     centerImg.src = '/frames/center.webp';
     centerImageRef.current = centerImg;
 
-    // 2. Preload 160 frame webp images into reference array
+    // 2. Preload 160 frame assets
     const images = [];
     for (let i = 0; i < TOTAL_FRAMES; i++) {
       const img = new Image();
@@ -32,7 +28,7 @@ export default function CanvasCharacterViewer() {
     }
     framesRef.current = images;
 
-    // 3. Track cursor position
+    // 3. Track mouse & touch coordinates
     const handleMouseMove = (e) => {
       mouseRef.current = { x: e.clientX, y: e.clientY };
     };
@@ -46,7 +42,7 @@ export default function CanvasCharacterViewer() {
     window.addEventListener('mousemove', handleMouseMove);
     window.addEventListener('touchmove', handleTouchMove);
 
-    // 4. Setup canvas rendering
+    // 4. Canvas resolution setup
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
@@ -61,20 +57,21 @@ export default function CanvasCharacterViewer() {
     handleResize();
     window.addEventListener('resize', handleResize);
 
+    // 5. Render loop
     const render = () => {
       const width = window.innerWidth;
       const height = window.innerHeight;
 
       ctx.clearRect(0, 0, width, height);
 
-      // Background base fill
+      // Base background color fill
       ctx.fillStyle = '#D31820';
       ctx.fillRect(0, 0, width, height);
 
       const dx = mouseRef.current.x - width / 2;
       const dy = mouseRef.current.y - height / 2;
 
-      // Angle calculation for cursor tracking
+      // Track cursor angle
       const targetAngle = Math.atan2(dy, dx) + ANGLE_OFFSET;
       let diff = targetAngle - currentAngleRef.current;
       while (diff < -Math.PI) diff += Math.PI * 2;
@@ -90,14 +87,14 @@ export default function CanvasCharacterViewer() {
       }
 
       if (imgToDraw && imgToDraw.complete && imgToDraw.naturalWidth > 0) {
-        // Calculate cover dimension scaling
+        // Full viewport aspect-cover calculation
         const scale = Math.max(width / imgToDraw.naturalWidth, height / imgToDraw.naturalHeight);
         const drawWidth = imgToDraw.naturalWidth * scale;
         const drawHeight = imgToDraw.naturalHeight * scale;
 
-        // Apply centering and optional offsets
-        const drawX = (width - drawWidth) / 2 + OFFSET_X;
-        const drawY = (height - drawHeight) / 2 + OFFSET_Y;
+        // Centered positioning
+        const drawX = (width - drawWidth) / 2;
+        const drawY = (height - drawHeight) / 2;
 
         ctx.drawImage(imgToDraw, drawX, drawY, drawWidth, drawHeight);
       }
@@ -107,7 +104,6 @@ export default function CanvasCharacterViewer() {
 
     render();
 
-    // 5. Cleanup event listeners on unmount
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('touchmove', handleTouchMove);
