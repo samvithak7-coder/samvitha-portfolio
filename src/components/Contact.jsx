@@ -52,7 +52,7 @@ export default function Contact() {
   return (
     <section id="contact" className="relative w-full pt-24 pb-12 px-6 md:px-12 lg:px-16 z-20 bg-gradient-to-b from-[#0D0506]/85 to-[#070203]/90 backdrop-blur-sm">
       <div className="max-w-7xl mx-auto">
-        
+
         {/* Section Header */}
         <div className="mb-16">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/20 text-xs font-semibold uppercase tracking-widest text-white/90 mb-3">
@@ -64,13 +64,13 @@ export default function Contact() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 mb-20">
-          
+
           {/* Left Column: Direct Contact Info & Socials (5 cols) */}
           <div className="lg:col-span-5 space-y-8">
             <div className="glass-card rounded-3xl p-8 border border-white/15 relative overflow-hidden">
               <h3 className="text-2xl font-bold text-white mb-2">Direct Contact</h3>
               <p className="text-white/70 text-sm mb-6">
-                Open to full-time roles, AI research collaborations, embedded safety projects, and freelance work.
+                Open to opportunities on real business projects in web development, automation and AI-powered workflows.
               </p>
 
               {/* Email Card with Copy Button */}
@@ -224,7 +224,7 @@ export default function Contact() {
         {/* Footer Bar */}
         <div className="pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-white/60 font-medium">
           <p>© {new Date().getFullYear()} Kesapragada Samvitha. Built with React & HTML5 Canvas.</p>
-          
+
           <button
             onClick={scrollToTop}
             className="flex items-center gap-1.5 px-4 py-2 rounded-full glass-card hover:bg-white/10 text-white transition-all"

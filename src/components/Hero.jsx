@@ -4,7 +4,7 @@ import { FileText, Send, Sparkles, MapPin, GraduationCap } from 'lucide-react';
 export default function Hero() {
   return (
     <section className="relative w-full min-h-screen flex flex-col justify-end px-6 md:px-12 lg:px-16 pb-12 md:pb-16 pt-32 pointer-events-none z-10">
-      
+
       {/* Top Right Status Badge */}
       <div className="absolute top-24 right-6 md:right-12 pointer-events-auto hidden sm:flex items-center gap-2 px-4 py-2 rounded-full glass-card border-white/20 text-xs font-semibold tracking-wide text-white shadow-lg">
         <span className="relative flex h-2.5 w-2.5">
@@ -44,14 +44,14 @@ export default function Hero() {
 
         {/* Compact 3-Line Bio */}
         <p className="text-white/90 text-base md:text-lg font-medium leading-relaxed mb-8 drop-shadow-md max-w-xl">
-          AI & Data Science student specializing in machine learning, computer vision, embedded safety systems, and full-stack software development.
+          AI & Data Science student building and deploying full-stack AI applications with Python, Flask, FastAPI and LLM APIs, from chat assistants to automation and RAG workflows.
         </p>
 
         {/* Two White Pill Buttons */}
         <div className="flex flex-wrap items-center gap-4">
           {/* Resume Button */}
           <a
-            href="/K_V_P_S_SAMVITHA_RESUME  (1).pdf"
+            href="/resume.pdf"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-2.5 px-7 py-3.5 rounded-full bg-white text-[#D31820] font-bold text-sm shadow-[0_10px_25px_rgba(255,255,255,0.3)] hover:bg-white/90 hover:shadow-[0_15px_35px_rgba(255,255,255,0.6)] hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 group"

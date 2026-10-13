@@ -1,63 +1,89 @@
 import React from 'react';
-import { Award, ShieldAlert, Stethoscope, QrCode, ExternalLink, Cpu, Brain, Layers, CheckCircle2 } from 'lucide-react';
+import { Award, ShieldAlert, Bot, FileSearch, Mic, ExternalLink, Github, Brain, CheckCircle2 } from 'lucide-react';
 
 export default function Projects() {
   const projects = [
     {
+      id: 'interview-analyzer',
+      title: 'AI Interview Analyzer',
+      subtitle: 'Automated Candidate Evaluation System',
+      badge: 'Full-Stack AI',
+      icon: Mic,
+      description:
+        'An end-to-end full-stack web application that evaluates interview responses using LLM-based speech and sentiment analytics.',
+      highlights: [
+        'Containerized microservice backend built with Docker, FastAPI, and Uvicorn, hosted on Render',
+        'LLM-based speech and sentiment analytics to evaluate candidate responses',
+        'Integrated drowsiness detection alerts and an emergency assistance button to enhance road safety'
+      ],
+      tags: ['Python', 'Docker', 'FastAPI', 'Uvicorn', 'LLM APIs', 'HTML/CSS', 'JavaScript'],
+      links: [
+        { label: 'Live Demo', url: 'https://interview-analyzer-vgit.onrender.com', icon: ExternalLink },
+        { label: 'GitHub', url: 'https://github.com/samvithak7-coder/interview-analyzer', icon: Github }
+      ]
+    },
+    {
+      id: 'ai-lead-assistant',
+      title: 'AI Lead Assistant',
+      subtitle: 'WordPress Plugin with Flask & LLM Backend',
+      badge: 'LLM & WordPress',
+      icon: Bot,
+      description:
+        'An AI chat assistant for business websites that answers visitor questions, remembers the conversation, and guides visitors to share their contact details for follow-up.',
+      highlights: [
+        'Python/Flask REST API integrating the Gemini LLM API with a business-specific system prompt, multi-turn memory, automatic model fallback, request timeouts and per-IP rate limiting',
+        'Custom PHP WordPress plugin that adds a floating chat widget to any WordPress site',
+        'Serverless deployment on Vercel, with a public demo page and a one-click WordPress Playground demo so recruiters can try it without installing anything'
+      ],
+      tags: ['Python', 'Flask', 'Gemini API', 'REST APIs', 'PHP', 'WordPress', 'JavaScript', 'HTML/CSS', 'Vercel', 'Git/GitHub'],
+      links: [
+        { label: 'Live Demo', url: 'https://ai-lead-assistant-backend.vercel.app', icon: ExternalLink },
+        { label: 'Backend', url: 'https://github.com/samvithak7-coder/ai-lead-assistant-backend', icon: Github },
+        { label: 'WP Plugin', url: 'https://github.com/samvithak7-coder/ai-lead-assistant-wp-plugin', icon: Github }
+      ]
+    },
+    {
+      id: 'ai-research-agent',
+      title: 'AI Research & Report Generator',
+      subtitle: 'Serverless Multi-Section Report Automation',
+      badge: 'Generative AI',
+      icon: FileSearch,
+      description:
+        'A serverless full-stack web application that automates query processing and multi-section technical report generation.',
+      highlights: [
+        'Flask backend using the Google GenAI SDK with secure, environment-injected API keys',
+        'Responsive dark-mode frontend with real-time pipeline status tracking and dynamic markdown rendering',
+        'Deployed natively on Vercel'
+      ],
+      tags: ['Python', 'Flask', 'Google Gemini API', 'HTML', 'CSS', 'Vercel'],
+      links: [
+        { label: 'Live Demo', url: 'https://ai-research-agent-eta-weld.vercel.app/', icon: ExternalLink },
+        { label: 'GitHub', url: 'https://github.com/samvithak7-coder/ai-research-agent', icon: Github }
+      ]
+    },
+    {
       id: 'vigil-netra',
       title: 'Vigil Netra',
-      subtitle: 'Embedded Vehicle Accident Data Recording & Safety System',
-      award: '🏆 3rd Prize Winner - Mini Project Exhibition',
+      subtitle: 'Automotive Black Box for Vehicles',
+      award: '🏆 3rd Prize - Mini Project Exhibition',
       badge: 'Embedded ML & Safety',
       icon: ShieldAlert,
       description:
-        'An end-to-end intelligent vehicle safety architecture integrating embedded hardware, real-time telemetry logging, computer vision drowsiness detection, and machine learning crash severity prediction.',
+        'An intelligent vehicle safety system integrating embedded hardware, real-time telemetry logging, computer vision drowsiness detection, and machine learning crash severity prediction. Research paper submitted to IEEE (under review).',
       highlights: [
-        'Real-time GPS & Accelerometer telemetry logging for blackbox analytics',
-        'TensorFlow & Scikit-learn models for instant crash severity prediction',
+        'Real-time GPS & accelerometer telemetry logging for black-box analytics',
+        'TensorFlow & Scikit-learn models for crash severity prediction',
         'OpenCV facial landmark analysis for driver fatigue & drowsiness alerts',
-        'Automated emergency dispatch notifications with live location payload'
+        'Automated emergency notifications with live location payload'
       ],
       tags: ['TensorFlow', 'Scikit-learn', 'OpenCV', 'Python', 'Embedded C / IoT', 'GPS & IMU', 'Computer Vision']
-    },
-    {
-      id: 'smart-hospital',
-      title: 'Smart Hospital Appointment System',
-      subtitle: 'AI Triage & Live Workload Analytics Platform',
-      badge: 'AI & Healthcare Analytics',
-      icon: Stethoscope,
-      description:
-        'Next-generation healthcare triage engine that dynamically assesses patient symptom severity using local LLM intelligence while visualizing hospital resources in real time.',
-      highlights: [
-        'AI Triage powered by Ollama LLM for automated symptom analysis & queue prioritization',
-        'Embedded live Tableau interactive dashboards for doctor workload & bed availability visualization',
-        'Secure patient portal with seamless booking workflow and automated reminders',
-        'Role-based access control for medical staff and department administrators'
-      ],
-      tags: ['Ollama LLM', 'React.js', 'Tableau API', 'Python', 'REST API', 'Node.js', 'Healthcare AI']
-    },
-    {
-      id: 'qr-payment',
-      title: 'Secure QR Code Payment Generator',
-      subtitle: 'Dynamic Full-Stack Cryptographic Payment Gateway',
-      badge: 'Full-Stack & Fintech Security',
-      icon: QrCode,
-      description:
-        'Full-stack payment link and dynamic QR code generation platform designed with microservices architecture, instant parameter encoding, and tamper-proof security features.',
-      highlights: [
-        'Dynamic UPI & Banking QR code payload generation with custom merchant parameters',
-        'Robust RESTful API routing and backend validation implemented in Python Flask',
-        'Cryptographic checksum verification to prevent transaction tampering',
-        'Clean responsive user interface with instant one-click download & copy capabilities'
-      ],
-      tags: ['Python Flask', 'RESTful Routing', 'QR Encoding', 'Security & Cryptography', 'JavaScript', 'Tailwind CSS']
     }
   ];
 
   return (
     <section id="work" className="relative w-full py-24 px-6 md:px-12 lg:px-16 z-20 bg-gradient-to-b from-transparent via-[#070203]/75 to-[#0D0506]/85 backdrop-blur-sm">
       <div className="max-w-7xl mx-auto">
-        
+
         {/* Section Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-4">
           <div>
@@ -69,12 +95,12 @@ export default function Projects() {
             </h2>
           </div>
           <p className="text-white/70 max-w-md text-sm md:text-base">
-            Innovative solutions spanning embedded machine learning, AI triage engines, computer vision, and secure web applications.
+            Full-stack AI applications built with Python, Flask, FastAPI and LLM APIs, plus an award-winning embedded safety system.
           </p>
         </div>
 
         {/* Projects Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {projects.map((project) => {
             const IconComponent = project.icon;
             return (
@@ -141,6 +167,27 @@ export default function Projects() {
                       </span>
                     ))}
                   </div>
+
+                  {/* Project Links */}
+                  {project.links && (
+                    <div className="flex flex-wrap gap-2 mt-5">
+                      {project.links.map((link) => {
+                        const LinkIcon = link.icon;
+                        return (
+                          <a
+                            key={link.url}
+                            href={link.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white text-[#D31820] text-xs font-bold hover:bg-white/90 hover:-translate-y-0.5 transition-all"
+                          >
+                            <LinkIcon className="w-3.5 h-3.5" />
+                            {link.label}
+                          </a>
+                        );
+                      })}
+                    </div>
+                  )}
                 </div>
               </div>
             );

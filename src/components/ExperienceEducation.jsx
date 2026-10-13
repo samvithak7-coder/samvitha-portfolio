@@ -57,7 +57,7 @@ export default function ExperienceEducation() {
   return (
     <section id="about" className="relative w-full py-24 px-6 md:px-12 lg:px-16 z-20 bg-[#0D0506]/85 backdrop-blur-sm">
       <div className="max-w-7xl mx-auto">
-        
+
         {/* Section Header */}
         <div className="mb-16">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/20 text-xs font-semibold uppercase tracking-widest text-white/90 mb-3">
@@ -69,7 +69,7 @@ export default function ExperienceEducation() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
-          
+
           {/* Experience Column (7 cols) */}
           <div className="lg:col-span-7 space-y-8">
             <h3 className="text-2xl font-bold text-white flex items-center gap-3">
@@ -158,7 +158,7 @@ export default function ExperienceEducation() {
               <h4 className="text-xl font-bold text-white mt-3 mb-1">
                 {education.degree}
               </h4>
-              
+
               <p className="text-sm font-semibold text-white/80 mb-4">
                 {education.institution} • {education.location}
               </p>

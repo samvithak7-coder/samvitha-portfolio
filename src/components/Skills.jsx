@@ -1,57 +1,54 @@
 import React from 'react';
-import { Cpu, Code2, Database, Wrench, Sparkles, Terminal, Check } from 'lucide-react';
+import { Cpu, Code2, Database, Wrench, Sparkles, Server, Globe, Workflow, Bot } from 'lucide-react';
 
 export default function Skills() {
   const skillCategories = [
     {
-      title: 'AI & Machine Learning',
-      icon: Cpu,
-      skills: [
-        { name: 'TensorFlow & Keras', level: 'Advanced', percent: 90 },
-        { name: 'Scikit-learn', level: 'Advanced', percent: 92 },
-        { name: 'OpenCV & Computer Vision', level: 'Advanced', percent: 88 },
-        { name: 'Ollama & LLM Integration', level: 'Intermediate', percent: 85 },
-        { name: 'Deep Learning Architectures', level: 'Intermediate', percent: 84 },
-      ],
-    },
-    {
-      title: 'Full-Stack Development',
+      title: 'Languages',
       icon: Code2,
-      skills: [
-        { name: 'React.js & Modern Frontend', level: 'Advanced', percent: 92 },
-        { name: 'Python Flask', level: 'Advanced', percent: 90 },
-        { name: 'JavaScript / ES6+', level: 'Advanced', percent: 90 },
-        { name: 'HTML5 Canvas & 2D/3D Logic', level: 'Advanced', percent: 88 },
-        { name: 'Tailwind CSS & Glassmorphism', level: 'Expert', percent: 95 },
-      ],
+      skills: ['Python', 'SQL', 'JavaScript', 'PHP (basic)', 'Java (basic)', 'C'],
     },
     {
-      title: 'Data Science & Analytics',
+      title: 'Backend & APIs',
+      icon: Server,
+      skills: ['Flask', 'FastAPI', 'REST APIs', 'Third-party API integration'],
+    },
+    {
+      title: 'AI / LLM',
+      icon: Cpu,
+      skills: ['Gemini API', 'LLM APIs', 'Ollama (local LLMs)', 'Prompt engineering', 'Multi-turn conversation handling'],
+    },
+    {
+      title: 'Web',
+      icon: Globe,
+      skills: ['HTML5', 'CSS3', 'JavaScript', 'Responsive design', 'WordPress plugin development'],
+    },
+    {
+      title: 'Databases & Data',
       icon: Database,
-      skills: [
-        { name: 'Data Pipelines & Preprocessing', level: 'Advanced', percent: 90 },
-        { name: 'Exploratory Data Analysis (EDA)', level: 'Advanced', percent: 94 },
-        { name: 'Pandas & NumPy', level: 'Advanced', percent: 92 },
-        { name: 'Tableau Live Dashboards', level: 'Advanced', percent: 88 },
-        { name: 'SQL & Relational Databases', level: 'Intermediate', percent: 85 },
-      ],
+      skills: ['MySQL', 'Pandas', 'NumPy', 'Matplotlib'],
     },
     {
-      title: 'Embedded Systems & Tools',
+      title: 'Tools & Cloud',
       icon: Wrench,
-      skills: [
-        { name: 'Embedded IoT & Sensors (GPS/IMU)', level: 'Advanced', percent: 86 },
-        { name: 'Git & GitHub Version Control', level: 'Advanced', percent: 92 },
-        { name: 'Linux / Shell Scripting', level: 'Intermediate', percent: 85 },
-        { name: 'RESTful API Architecture', level: 'Advanced', percent: 90 },
-      ],
+      skills: ['Git / GitHub', 'Docker', 'Vercel', 'Render', 'Linux (Ubuntu)'],
+    },
+    {
+      title: 'AI-Assisted Development',
+      icon: Bot,
+      skills: ['Claude', 'Google Antigravity (Gemini)'],
+    },
+    {
+      title: 'Automation & RAG',
+      icon: Workflow,
+      skills: ['n8n workflows', 'Webhooks', 'Embeddings', 'Vector databases'],
     },
   ];
 
   return (
     <section id="skills" className="relative w-full py-24 px-6 md:px-12 lg:px-16 z-20 bg-gradient-to-b from-[#0D0506]/85 via-[#070203]/85 to-[#0D0506]/85 backdrop-blur-sm">
       <div className="max-w-7xl mx-auto">
-        
+
         {/* Section Header */}
         <div className="mb-16">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/20 text-xs font-semibold uppercase tracking-widest text-white/90 mb-3">
@@ -77,27 +74,18 @@ export default function Skills() {
                   </div>
                   <div>
                     <h3 className="text-xl font-bold text-white">{category.title}</h3>
-                    <p className="text-xs text-white/60 font-medium">Domain Proficiency</p>
+
                   </div>
                 </div>
 
-                <div className="space-y-5">
-                  {category.skills.map((skill, sIdx) => (
-                    <div key={sIdx} className="space-y-1.5">
-                      <div className="flex justify-between text-xs font-semibold">
-                        <span className="text-white/90 flex items-center gap-1.5">
-                          <Check className="w-3.5 h-3.5 text-red-400" />
-                          {skill.name}
-                        </span>
-                        <span className="text-white/60">{skill.level}</span>
-                      </div>
-                      <div className="w-full h-2 bg-black/40 rounded-full overflow-hidden p-0.5 border border-white/10">
-                        <div
-                          className="h-full bg-gradient-to-r from-[#D31820] to-[#FF4D55] rounded-full transition-all duration-1000 ease-out"
-                          style={{ width: `${skill.percent}%` }}
-                        />
-                      </div>
-                    </div>
+                <div className="flex flex-wrap gap-2">
+                  {category.skills.map((skill) => (
+                    <span
+                      key={skill}
+                      className="px-3 py-1.5 rounded-lg bg-black/40 border border-white/10 text-xs font-medium text-white/80 hover:text-white hover:border-white/30 transition-colors"
+                    >
+                      {skill}
+                    </span>
                   ))}
                 </div>
               </div>
